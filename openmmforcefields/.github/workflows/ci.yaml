@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+  schedule:
+    - cron: "0 0 * * *"
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}, Python ${{ matrix.python-version }}, OpenMM ${{ matrix.openmm-version }}
+    runs-on: ${{ matrix.os }}
+    env:
+      OE_LICENSE: ${{ github.workspace }}/oe_license.txt
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+        amber-conversion: [false]
+        charmm-conversion: [false]
+        openmm-version: ["8.1.2", "8.2.0"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Conda Environment
+      uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-file: devtools/conda-envs/test_env.yaml
+        create-args: >-
+          python=${{ matrix.python-version }}
+          openmm=${{ matrix.openmm-version }}
+
+    - name: Install Package
+      run: |
+        pip list
+        micromamba list
+        micromamba remove --force openmmforcefields
+        python -m pip install .
+
+    - name: Conda Environment Information
+      run: |
+        micromamba info
+        micromamba list
+        python -c "from openmmforcefields import __version__, __file__; print(__version__, __file__)"
+
+    - name: Test Installed Package
+      run: |
+        # https://github.com/openforcefield/openff-units/issues/111
+        python -c "from openff.units import unit"
+
+        pytest -v -n logical --rungaff --log-cli-level $LOGLEVEL $COV_ARGS --durations=20 \
+          openmmforcefields/tests/
+
+        # add --rungaff / --runespaloma to run those tests
+
+      env:
+        COV_ARGS: --cov=openmmforcefields --cov-config=setup.cfg --cov-append --cov-report=xml
+        LOGLEVEL: "INFO"
+        KMP_DUPLICATE_LIB_OK: "True"
+
+    - name: Test AMBER conversion
+      if: ${{ matrix.amber-conversion == 'true' }}
+      run: |
+        python convert_amber.py --input gaff.yaml --log gaff-tests.csv --verbose
+      working-directory: ./amber
+
+    - name: Test CHARMM conversion
+      if: ${{ matrix.charmm-conversion == 'true' }}
+      run: |
+
+        # TODO: Turn on these tests (in job matrix) when new ParmEd is released
+        # TODO: Find a way to avoid timing out when running full charmm36.yaml conversion below
+        python convert_charmm.py --verbose --in files/waters.yaml && python convert_charmm.py --verbose --in files/charmm36.yaml
+        python convert_charmm.py --verbose --in files/waters.yaml
+        python convert_charmm.py --verbose
+
+        # TODO: Uncomment this when tests are expected to work
+        # python test_charmm.py --verbose
+
+      working-directory: ./charmm
+
+    - name: Run docstrings
+      continue-on-error: True
+      run: |
+        pytest --doctest-modules openmmforcefields --ignore=openmmforcefields/tests
+
+    - name: Upload coverage report to CodeCov
+      uses: codecov/codecov-action@v5
+      if: ${{ github.repository == 'openmm/openmmforcefields'
+              && github.event != 'schedule' }}
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        fail_ci_if_error: false  # I don't want this to cause CI failures when a developer pushes to a fork

@@ -1,0 +1,104 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    # Run every Sunday at midnight
+    - cron:  '0 0 * * 0'
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+
+          # Oldest supported versions
+          - name: Linux (CUDA 11.8, Python 3.10, PyTorch 2.0)
+            enable_cuda: true
+            cuda: "11.8.0"
+            gcc: "10.3.*"
+            nvcc: "11.8"
+            python: "3.10.*"
+            torchani: "2.2.*"
+            pytorch: "2.0.*"
+
+          # Latest supported versions (with CUDA)
+          - name: Linux (CUDA 12, Python 3.13, PyTorch 2.5)
+            enable_cuda: true
+            cuda: "12.6.0"
+            gcc: "10.3.*"
+            nvcc: "12.*"
+            python: "3.13.*"
+            torchani: "2.2.*"
+            pytorch: "2.5.*"
+
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
+
+    - name: Install CUDA Toolkit
+      uses: Jimver/cuda-toolkit@v0.2.21
+      with:
+        cuda: ${{ matrix.cuda }}
+        linux-local-args: '["--toolkit", "--override"]'
+        log-file-suffix: "${{ matrix.cuda }}.txt"
+      if: ${{ matrix.enable_cuda }}
+
+    - name: Install Miniconda
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        activate-environment: ""
+        auto-activate-base: true
+        miniforge-variant: Miniforge3
+        use-mamba: true
+
+    - name: Prepare dependencies
+      run: |
+        sed -i -e "/gxx_linux-64/c\  - gxx_linux-64 ${{ matrix.gcc }}" \
+               -e "/torchani/c\  - torchani ${{ matrix.torchani }}" \
+               -e "/python/c\  - python ${{ matrix.python }}" \
+               -e "/pytorch-gpu/c\  - pytorch-gpu ${{ matrix.pytorch }}" \
+               environment.yml
+
+    - name: Show dependency file
+      run: cat environment.yml
+
+    - name: Install dependencies
+      run: mamba env create -n nnpops -f environment.yml
+      env:
+        # Needed to install pytorch-gpu on a machine without a GPU
+        CONDA_OVERRIDE_CUDA: ${{ matrix.nvcc }}
+
+    - name: List conda environment
+      run: |
+        conda activate nnpops
+        conda list
+
+    - name: Configure, compile, and install
+      run: |
+        conda activate nnpops
+        mkdir build && cd build
+        cmake .. \
+              -DENABLE_CUDA=${{ matrix.enable_cuda }} \
+              -DTorch_DIR=$(python -c 'import torch.utils; print(torch.utils.cmake_prefix_path)')/Torch \
+              -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
+        make install
+
+    - name: Test
+      run: |
+        conda activate nnpops
+        cd build
+        ctest --verbose --exclude-regex TestCuda

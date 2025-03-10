@@ -1,0 +1,335 @@
+# AMBER --> OpenMM-ffxml conversion YAML
+# Author: Rafal P. Wiewiora, Chodera Lab
+# Structure: list - first entry - source package info, further entries - 1/resulting ffxml file
+
+- MODE: LEAPRC
+- sourcePackage: AmberTools
+  sourcePackageVersion: 20.15
+- Source: leaprc.phosaa10
+  Reference:
+  - >-
+    Homeyer N., Horn A. H. C., Lanig H., Sticht H. (2006). AMBER force-field parameters for phosphorylated amino acids in different protonation states: phosphoserine, phosphothreonine, phosphotyrosine, and phosphohistidine.
+    J. Mol. Model. 12, 281.
+    Steinbrecher, T., Latzer, J., and Case, D.A. (2012). Revised AMBER parameters for bioorganic phosphates.
+    J. Chem. Theory Comput. 8, 4405-4412.
+  Options:
+    filter_warnings: always
+    write_unused: True
+  Test:
+  - protein_phospho
+- Source: leaprc.phosaa14SB
+  Reference:
+  - >-
+    L. Raguette; A. Cuomo; K. Belfon; C. Tian; Q. Wu; C. Simmerling.
+    Updated Amber force field parameters for phosphorylated amino acids for ff14SB and ff19SB.
+    In Prep, 2020.
+  Options:
+    filter_warnings: always
+    write_unused: True
+  Test:
+  - protein_phospho
+- Source: leaprc.protein.ff15ipq
+  Prefix: protein
+  Reference:
+  - >-
+    Debiec, K.T.; Cerutti, D.S.; Baker, L.R.; Gronenborn, A.M.; Case, D.A.; Chong, L.T.
+    Further along the Road Less Traveled: AMBER ff15ipq, an Original Protein Force Field Built on a Self-Consistent Physical Model.
+    J. Chem. Theory Comput., 2016, 12, 3926-3947.
+  Test:
+  - protein
+- Source: leaprc.protein.ff15ipq-vac
+  Prefix: protein
+  Reference:
+  - >-
+    Debiec, K.T.; Cerutti, D.S.; Baker, L.R.; Gronenborn, A.M.; Case, D.A.; Chong, L.T.
+    Further along the Road Less Traveled: AMBER ff15ipq, an Original Protein Force Field Built on a Self-Consistent Physical Model.
+    J. Chem. Theory Comput., 2016, 12, 3926-3947.
+  Test:
+  - protein
+- Source: leaprc.lipid17
+  CharmmFFXMLFilename: ../charmm/ffxml/charmm36_nowaters.xml
+  CharmmLipid2AmberFilename: files/charmmlipid2amber.csv
+  Reference:
+  - >-
+    Skjevik, A.A.; Madej, Benjamin D.; Walker, R.C.; Teigen, K.
+    Lipid11: A modular framework for lipid simulations using amber. J. Phys. Chem. B, 2012, 116, 11124-11136.
+  - >-
+    Dickson, C.J.; Rosso, L.; Betz, R.M.; Walker, R.C.; Gould, I.R.
+    GAFFlipid: a General Amber Force Field for the accurate molecular dynamics simulation of phospholipid. Soft Matter, 2012, 8, 9617.
+  - >-
+    Dickson, C.J.; Madej, B.D.; Skjevik, A.A..; Betz, R.M.; Teigen, K.; Gould, I.R.; Walker, R.C.
+    Lipid14: The Amber Lipid Force Field. J. Chem. Theory Comput., 2014, 10, 865-879.
+  - >-
+    Skjevik, A.A.; Madej, B.D.; Dickson, C.J.; Teigen, K.; Walker, R.C.; Gould, I.R.
+    All-atom lipid bilayer self-assembly with the amber and charmm lipid force fields. Chem. Commun., 2015, 51, 4402-4405.
+  - >-
+    Skjevik, A.A.; Madej, B.D.; Dickson, C.J.; Lin, C.; Teigen, K.; Walker, R.C.; Gould, I.R.
+    Simulations of lipid bilayer self-assembly using all-atom lipid force fields. Phys. Chem. Chem. Phys., 2016, 18, 10573-10584.
+  - >-
+    Madej, B.D.; Gould, I.R.; Walker, R.C.
+    A Parameterization of Cholesterol for Mixed Lipid Bilayer Simulation within the Amber Lipid14 Force Field. J Phys Chem B, 2015, 119, 12424-12435.
+  Test:
+  - lipids
+- Source: leaprc.protein.ff14SB
+  Prefix: protein
+  Reference:
+  - >-
+    Maier, J.A., Martinez, C., Kasavajhala, K., Wickstrom, L., Hauser, K.E., and Simmerling, C. (2015).
+    ff14SB: Improving the Accuracy of Protein Side Chain and Backbone Parameters from ff99SB. J. Chem. Theory Comput. 11, 3696-3713.
+  Test:
+  - protein
+- Source: oldff/leaprc.ff14SB.redq
+  Reference:
+  - >-
+    Maier, J.A., Martinez, C., Kasavajhala, K., Wickstrom, L., Hauser, K.E., and Simmerling, C. (2015).
+    ff14SB: Improving the Accuracy of Protein Side Chain and Backbone Parameters from ff99SB. J. Chem. Theory Comput. 11, 3696-3713.
+  Test:
+  - protein
+  - nucleic
+- Source: leaprc.protein.ff14SBonlysc
+  Prefix: protein
+  Reference:
+  - >-
+    Maier, J.A., Martinez, C., Kasavajhala, K., Wickstrom, L., Hauser, K.E., and Simmerling, C. (2015).
+    ff14SB: Improving the Accuracy of Protein Side Chain and Backbone Parameters from ff99SB. J. Chem. Theory Comput. 11, 3696-3713.
+  - >-
+    Hornak, V., Abel, R., Okur, A., Strockbine, B., Roitberg, A., and Simmerling, C. (2006).
+    Comparison of multiple Amber force fields and development of improved protein backbone parameters. Proteins 65, 712-725.
+  Test:
+  - protein
+- Source: leaprc.protein.ff03.r1
+  Prefix: protein
+  Reference:
+  - >-
+    Duan, Y., Wu, C., Chowdhury, S., Lee, M.C., Xiong, G., Zhang, W., Yang, R., Cieplak, P., Luo, R., Lee, T., et al. (2003).
+    A point-charge force field for molecular mechanics simulations of proteins based on condensed-phase quantum mechanical calculations.
+    J. Comput. Chem. 24, 1999-2012.
+  - >-
+    Lee, M.C., and Duan, Y. (2004). Distinguish protein decoys by Using a scoring function based on a new AMBER force field,
+    short molecular dynamics simulations, and the generalized born solvent model. Proteins 55, 620-634.
+  Test:
+  - protein
+- Source: leaprc.protein.ff03ua
+  Prefix: protein
+  Reference:
+  - >-
+    Yang, L., Tan, C., Hsieh, M.-J., Wang, J., Duan, Y., Cieplak, P., Caldwell, J., Kollman, P.A., and Luo, R. (2006).
+    New-Generation Amber United-Atom Force Field. J. Phys. Chem. B 110, 13166-13176.
+  Test:
+  - protein_ua
+- Source: leaprc.ffPM3
+  Reference:
+  - >-
+    Wollacott, A.M., and Merz, K.M. (2006). Development of a Parametrized Force Field To Reproduce Semiempirical Geometries.
+    J. Chem. Theory Comput. 2, 1070-1077.
+  Test:
+  - protein
+  - nucleic
+- Source: leaprc.DNA.OL15
+  Prefix: DNA
+  Reference:
+  - >-
+    Zgarbova, M.; Sponer, J.; Otyepka, M.; Cheatham, T.E. III; Galindo-Murillo, R.; Jurecka, P.
+    Refinement of the Sugar-Phosphate Backbone Torsion Beta for AMBER Force Fields Improves the Description of Z- and B-DNA.
+    J. Chem. Theor. and Comp., 2015, 12, 5723-5736.
+  Test:
+  - dna
+- Source: leaprc.DNA.bsc1
+  Prefix: DNA
+  Reference:
+  - >-
+    Ivani, I.; Dans, P.D.; Noy, A.; Perez, A.; Faustino, I.; Hopsital, A.; Walther, J.; Andrio, P.; Goni, R.;
+    Balaceanu, A.; Portella, G.; Battistini, F.; GelpA, J.L.; Gonzalez, C.; Vendruscolo, M.; Laughton, C.A.; Harris, S.; Case, D.A.; Orozco, M.
+    Parmbsc1: A refined force field for DNA simulations. Nature Meth., 2016, 13, 55-58.
+  Test:
+  - dna
+- Source: leaprc.RNA.OL3
+  Prefix: RNA
+  Reference:
+  - >-
+    Zgarbova, M.; Otyepka, M.; Sponer, J.; Mladek, A.; Banas, P.; Cheatham, T.E.; Jurecka, P.
+    Refinement of the Cornell et al. Nucleic Acids Force Field Based on Reference Quantum Chemical Calculations of Glycosidic Torsion Profiles.
+    J. Chem. Theory Comput., 2011, 7, 2886-2902.
+  Test:
+  - rna
+- Source: leaprc.RNA.YIL
+  Prefix: RNA
+  Reference:
+  - >-
+    Zgarbova, M.; Otyepka, M.; Sponer, J.; Mladek, A.; Banas, P.; Cheatham, T.E.; Jurecka, P.
+    Refinement of the Cornell et al. Nucleic Acids Force Field Based on Reference Quantum Chemical Calculations of Glycosidic Torsion Profiles.
+    J. Chem. Theory Comput., 2011, 7, 2886-2902.
+  Test:
+  - rna
+- Source: leaprc.RNA.ROC
+  Prefix: RNA
+  Reference:
+  - >-
+    Zgarbova, M.; Otyepka, M.; Sponer, J.; Mladek, A.; Banas, P.; Cheatham, T.E.; Jurecka, P.
+    Refinement of the Cornell et al. Nucleic Acids Force Field Based on Reference Quantum Chemical Calculations of Glycosidic Torsion Profiles.
+    J. Chem. Theory Comput., 2011, 7, 2886-2902.
+  Test:
+  - rna
+- Source: leaprc.protein.fb15
+  Prefix: protein
+  Reference:
+  - >-
+    Wang, L.-P., McKiernan, K.A., Gomes, J., Beauchamp, K.A., Head-Gordon, T., Rice, J.E., Swope, W.C., Martinez, T.J., and Pande, V.S. (2017).
+    Building a More Predictive Protein Force Field: A Systematic and Reproducible Route to AMBER-FB15. J. Phys. Chem. B 121, 4023-4039.
+  Test:
+  - protein
+- Source: oldff/leaprc.ff10
+  Reference:
+  - >-
+    Hornak, V., Abel, R., Okur, A., Strockbine, B., Roitberg, A., and Simmerling, C. (2006).
+    Comparison of multiple Amber force fields and development of improved protein backbone parameters. Proteins 65, 712-725.
+  - >-
+    Perez, A., Marchan, I., Svozil, D., Sponer, J., Cheatham, T.E., Laughton, C.A., and Orozco, M. (2007).
+    Refinement of the AMBER Force Field for Nucleic Acids: Improving the Description of alpha/gamma Conformers. Biophysical Journal 92, 3817-3829.
+  - >-
+    Banas, P., Hollas, D., Zgarbova, M., Jurecka, P., Orozco, M., Cheatham, T.E., Sponer, J., and Otyepka, M. (2010).
+    Performance of Molecular Mechanics Force Fields for RNA Simulations: Stability of UUCG and GNRA Hairpins. J. Chem. Theory Comput. 6, 3836-3849.
+  - >-
+    Zgarbova, M., Otyepka, M., Sponer, J., Mladek, A., Banas, P., Cheatham, T.E., and Jurecka, P. (2011).
+    Refinement of the Cornell et al. Nucleic Acids Force Field Based on Reference Quantum Chemical Calculations of Glycosidic Torsion Profiles.
+    J. Chem. Theory. Comput. 7, 2886-2902.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff03
+  Reference:
+  - >-
+    Duan, Y., Wu, C., Chowdhury, S., Lee, M.C., Xiong, G., Zhang, W., Yang, R., Cieplak, P., Luo, R., Lee, T., et al. (2003).
+    A point-charge force field for molecular mechanics simulations of proteins based on condensed-phase quantum mechanical calculations.
+    J. Comput. Chem. 24, 1999-2012.
+  - >-
+    Lee, M.C., and Duan, Y. (2004). Distinguish protein decoys by Using a scoring function based on a new AMBER force field,
+    short molecular dynamics simulations, and the generalized born solvent model. Proteins 55, 620-634.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff99
+  Reference:
+  - >-
+    Wang, J., Cieplak, P., and Kollman, P.A. (2000).
+    How well does a restrained electrostatic potential (RESP) model perform in calculating conformational energies of organic and biological molecules?
+    J. Comput. Chem. 21, 1049-1074.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff99SB
+  Reference:
+  - >-
+    Hornak, V., Abel, R., Okur, A., Strockbine, B., Roitberg, A., and Simmerling, C. (2006).
+    Comparison of multiple Amber force fields and development of improved protein backbone parameters. Proteins 65, 712-725.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff99SBildn
+  Reference:
+  - >-
+    Lindorff-Larsen, K., Piana, S., Palmo, K., Maragakis, P., Klepeis, J.L., Dror, R.O., and Shaw, D.E. (2010).
+    Improved side-chain torsion potentials for the Amber ff99SB protein force field. Proteins 78, 1950-1958.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff99SBnmr
+  Reference:
+  - >-
+    Li, D.-W., and Bruschweiler, R. (2011).
+    Iterative Optimization of Molecular Mechanics Force Fields from NMR Data of Full-Length Proteins. J. Chem. Theory Comput. 7, 1773-1782.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff99bsc0
+  Reference:
+  - >-
+    Perez, A., Marchan, I., Svozil, D., Sponer, J., Cheatham, T.E., Laughton, C.A., and Orozco, M. (2007).
+    Refinement of the AMBER Force Field for Nucleic Acids: Improving the Description of alpha/gamma Conformers. Biophysical Journal 92, 3817-3829.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff98
+  Reference:
+  - >-
+    III, T.E.C., Cieplak, P., and Kollman, P.A. (1999).
+    A Modified Version of the Cornell et al. Force Field with Improved Sugar Pucker Phases and Helical Repeat.
+    Journal of Biomolecular Structure and Dynamics 16, 845-862.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff96
+  Reference:
+  - >-
+    Kollman, P., Dixon, R., Cornell, W., Fox, T., Chipot, C., and Pohorille, A. (1997).
+    The development/application of a minimalist molecular mechanics force field using a combination of ab initio calculations and experimental data.
+    Computer Simulations of Biomolecular Systems: Computer Simulations of Biomolecular Systems, ESCOM.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.ff94
+  Reference:
+  - >-
+    Cornell, W.D., Cieplak, P., Bayly, C.I., Gould, I.R., Merz, K.M., Ferguson, D.M., Spellmeyer, D.C., Fox, T., Caldwell, J.W., and Kollman, P.A. (1995).
+    A Second Generation Force Field for the Simulation of Proteins, Nucleic Acids, and Organic Molecules. J. Am. Chem. Soc. 117, 5179-5197.
+  Test:
+  - protein
+  - nucleic
+- Source: oldff/leaprc.DNA.bsc0
+  Prefix: DNA
+  Reference:
+  - >-
+    Perez, A.; Marchan, I.; Svozil, D.; Sponer, J.; Cheatham, T.E.; Laughton, C.A.; Orozco, M.
+    Refinement of the AMBER Force Field for Nucleic Acids: Improving the Description of alpha/gamma Conformers. Biophys. J., 2007, 92, 3817-3829.
+  Test:
+  - dna
+- Source: oldff/leaprc.ff14SB
+  Reference:
+  - >-
+    Maier, J.A., Martinez, C., Kasavajhala, K., Wickstrom, L., Hauser, K.E., and Simmerling, C. (2015).
+    ff14SB: Improving the Accuracy of Protein Side Chain and Backbone Parameters from ff99SB. J. Chem. Theory Comput. 11, 3696-3713.
+  Test:
+  - protein
+  - nucleic
+- Source: leaprc.ffAM1
+  Reference:
+  - >-
+    Wollacott, A.M., and Merz, K.M. (2006). Development of a Parametrized Force Field To Reproduce Semiempirical Geometries.
+    J. Chem. Theory Comput. 2, 1070-1077.
+  Test:
+  - protein
+  - nucleic
+- Source: leaprc.phosaa10
+  Reference:
+  - >-
+    Homeyer N., Horn A. H. C., Lanig H., Sticht H. (2006). AMBER force-field parameters for phosphorylated amino acids in different protonation states: phosphoserine, phosphothreonine, phosphotyrosine, and phosphohistidine.
+    J. Mol. Model. 12, 281.
+    Steinbrecher, T., Latzer, J., and Case, D.A. (2012). Revised AMBER parameters for bioorganic phosphates.
+    J. Chem. Theory Comput. 8, 4405-4412.
+  Options:
+    filter_warnings: always
+    write_unused: True
+  Test:
+  - protein_phospho
+- Source: leaprc.phosaa14SB
+  Reference:
+  - >-
+    L. Raguette; A. Cuomo; K. Belfon; C. Tian; Q. Wu; C. Simmerling.
+    Updated Amber force field parameters for phosphorylated amino acids for ff14SB and ff19SB.
+    In Prep, 2020.
+  Options:
+    filter_warnings: always
+    write_unused: True
+  Test:
+  - protein_phospho
+# FFs that couldn't be converted yet due to problems
+# Torsion problem
+#- Source: oldff/leaprc.ff14ipq
+  # Reference:
+  # - >-
+  #   Placeholder
+  #   Placeholder
+  # Test:
+  # - protein
+  # - nucleic
+  #
