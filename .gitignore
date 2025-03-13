@@ -36,7 +36,7 @@ package-lock.json
 *.manifest
 *.spec
 
-*.pdb
+# *.pdb
 *.gz
 
 # Installer logs
